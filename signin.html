@@ -7,7 +7,7 @@
   <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google-signin-client_id" content="101556968005-t3ldobv622kv5ruaem1nuhurlvojp2bo.apps.googleusercontent.com">
     <script src="https://accounts.google.com/gsi/client" async defer></script> -->
-    <meta name="google-signin-client_id" content="101556968005-t3ldobv622kv5ruaem1nuhurlvojp2bo.apps.googleusercontent.com">
+    <meta name="google-signin-client_id" content="700124958827-u9i5ecq61pdvmsop0aomqd9ufp4l5ssr.apps.googleusercontent.com">
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <style>
         .data {
@@ -96,7 +96,7 @@
         </div>
         <div class="google-signin-wrapper">
           <div id="g_id_onload"
-               data-client_id="101556968005-t3ldobv622kv5ruaem1nuhurlvojp2bo.apps.googleusercontent.com"
+               data-client_id="700124958827-u9i5ecq61pdvmsop0aomqd9ufp4l5ssr.apps.googleusercontent.com"
                data-callback="onSignIn"
                data-auto_prompt="false">
           </div>
@@ -105,7 +105,7 @@
               <p>Name:</p>
               <p id="name" class="alert alert-success"></p>
               <p>Profile pic:</p>
-              <img id="image" class="round-circle" width="100" height="100">
+              <img id="image" class="round-circle" width="50" height="50">
               <p>Email:</p>
               <p id="email"></p>
               <button type="button" class="btn btn-danger" onclick="signOut()">Sign Out</button>
@@ -145,6 +145,9 @@
       document.getElementById('image').src = user.picture;
       document.querySelector('.data').style.display = 'block';
       document.querySelector('.g_id_signin').style.display = 'none';
+      alert("logined successfully..")
+      window.location.href = 'http://127.0.0.1:5500/gather-up';
+
   }
 
   function signOut() {
@@ -207,7 +210,7 @@
 
   
 
-    startApp();
+    // startApp();y
   </script>
 
   <script src="index.js"></script>
