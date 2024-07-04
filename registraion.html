@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -45,7 +46,7 @@
       <p class="illu-quoat-para">Select the category you fit in</p>
       <img src="images/Sign up-amico.svg" alt=" " >
     </div>
-
+    <form id="registrationForm" onsubmit="registerUser(event)">
     <div class="form-box">
       <div class="login-container" id="login">
         <div class="top">
@@ -53,24 +54,24 @@
         </div>
         <div class="two-forms">
           <div class="input-box">
-            <input type="text" class="input-field" placeholder="Firstname">
+            <input type="text" id="firstname" class="input-field" placeholder="Firstname" required>
             <i class="fa-solid fa-user"></i>
           </div>
           <div class="input-box">
-            <input type="text" class="input-field" placeholder="Lastname">
+            <input type="text"id="lastname" class="input-field" placeholder="Lastname" required>
             <i class="fa-solid fa-user"></i>
           </div>
         </div>
         <div class="input-box">
-          <input type="text" class="input-field" placeholder="Email">
+          <input type="text"id="email" class="input-field" placeholder="Email" required>
           <i class="fa-solid fa-at"></i>
         </div>
         <div class="input-box">
-          <input type="number" class="input-field" placeholder="Phone">
+          <input type="number"id="phone" class="input-field" placeholder="Phone" required>
           <i class="fa-solid fa-phone"></i>
         </div>
         <div class="input-box">
-          <select name="prof" id="prof" class="input-field" placeholder="proces">
+          <select name="prof" id="prof" class="input-field" placeholder="proces" required>
             <option value="Profession">Profession</option>
             <option value="Student">Student</option>
             <option value="Teacher">Teacher</option>
@@ -79,20 +80,22 @@
           <i class="fa-solid fa-user-tie"></i>
         </div>
         <div class="input-box">
-          <input type="text" class="input-field" placeholder="college">
+          <input type="text" id="college" class="input-field" placeholder="college" required>
           <i class="fa-solid fa-graduation-cap"></i>
         </div>
         <div class="input-box">
-          <input type="password" class="input-field" placeholder="Password">
+          <input type="password" id="password" class="input-field" placeholder="Password" autocomplete="new-password" required>
           <i class="fa-solid fa-lock"></i>
         </div>
         <div class="input-box">
-          <input type="password" class="input-field" placeholder=" Confirm Password">
+          <input type="password" id="confirmPassword" class="input-field" placeholder="Confirm Password" autocomplete="new-password" required> 
+
           <i class="fa-solid fa-lock"></i>
         </div>
         <div class="input-box">
-          <input type="submit" class="submit" value="Register">
+          <button type="submit" class="submit" onclick="registerUser()">Register</button>
         </div>
+      </form>
         <div class="two-col">
           <div class="one">
             <input type="checkbox" id="register-check">
@@ -105,16 +108,18 @@
             </a>
           </div>
         </div>
-        <div class="top">
-          <a href="#" onclick="googleSignIn()">
-            <i class="fab fa-google google"></i>
-          </a>
-        </div>
+        <!-- <div class="top">
+          <a href="@{/oauth2/authorization/google}">
+
+              Login with Google
+              <i class="fab fa-google google"></i>
+          </a> -->
       </div>
-    </div>
+    
   </div>
 
   <script>
+
     function myMenuFunction() {
       var i = document.getElementById("navMenu");
       if (i.className === "nav-menu") {
@@ -123,6 +128,60 @@
         i.className = "nav-menu";
       }
     }
+
+    function registerUser(event){
+      event.preventDefault();
+      console.log("hello")
+      const formData = {
+          firstname: document.getElementById('firstname').value,
+          
+          lastname: document.getElementById('lastname').value,
+          email: document.getElementById('email').value,
+          phone: document.getElementById('phone').value,
+          profession: document.getElementById('prof').value,
+          college: document.getElementById('college').value,
+          password: document.getElementById('password').value,
+          confirmPassword: document.getElementById('confirmPassword').value,
+        };
+        console.log("form data",formData.firstname);
+         // Example: Validate form data (you should implement your own validation logic)
+         if (formData.firstname.trim() === '' || formData.email.trim() === '' || formData.password.trim() === '') {
+          alert('Please fill out required fields: Firstname, Email, and Password');
+          return;
+        }
+
+        if (formData.password !== formData.confirmPassword) {
+          alert('Passwords do not match');
+          return;
+        }
+        console.log("likhitha");
+          // Example: Send formData to server (you should implement your server-side logic)
+          fetch('http://localhost:7001/api/register', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify(formData),
+})
+.then(response => {
+  if (!response.ok) {
+    throw new Error('Network response was not ok');
+  }
+  return response.text();
+})
+.then(data => {
+  console.log('Success:', data);
+  alert("registerdSuccessfully")
+  // Handle success response as needed
+  window.open('home.html', '_self');
+})
+.catch(error => {
+  console.error('Error:', error);
+  // Handle error response or network error
+  alert("user already exits...use another mail..")
+});
+    }
+    
 
     function googleSignIn() {
       gapi.load('auth2', function() {

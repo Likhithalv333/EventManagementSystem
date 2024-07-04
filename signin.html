@@ -4,25 +4,37 @@
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="google-signin-client_id"
-    content="239288406210-jnd264hd1jik4iuvngmphvt608rd8tm1.apps.googleusercontent.com">
+  <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="google-signin-client_id" content="101556968005-t3ldobv622kv5ruaem1nuhurlvojp2bo.apps.googleusercontent.com">
+    <script src="https://accounts.google.com/gsi/client" async defer></script> -->
+    <meta name="google-signin-client_id" content="101556968005-t3ldobv622kv5ruaem1nuhurlvojp2bo.apps.googleusercontent.com">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <style>
+        .data {
+            display: none;
+        }
+    </style>
+
   <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
   <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"> -->
   <link rel="stylesheet" href="signin.css">
+  <!-- <link rel="stylesheet" href="index.css"> -->
   <title>Login </title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
     integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="googlesignin.css">
+
 </head>
 
 <body>
-  <script src="https://apis.google.com/js/platform.js" async defer></script>
+ 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
     crossorigin="anonymous"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script> -->
   <div class="wrapper">
     <nav class="nav">
       <div class="nav-logo">
@@ -60,17 +72,19 @@
         <div class="top">
           <header>Login</header>
         </div>
-        <div class="input-box">
-          <input type="text" class="input-field" placeholder="Username or Email">
-          <i class="bx bx-user"></i>
-        </div>
-        <div class="input-box">
-          <input type="password" class="input-field" placeholder="Password">
-          <i class="bx bx-lock-alt"></i>
-        </div>
-        <div class="input-box">
-          <input type="submit" class="submit" value="Sign In">
-        </div>
+        <form id="loginForm" onsubmit="Login(event)">
+          <div class="input-box">
+            <input type="text" id="email" name="email" class="input-field" placeholder="Username or Email" autocomplete="username" required>
+            <i class="bx bx-user"></i>
+          </div>
+          <div class="input-box">
+            <input type="password" id="password" name="password" class="input-field" placeholder="Password" autocomplete="current-password" required>
+            <i class="bx bx-lock-alt"></i>
+          </div>
+          <div class="input-box">
+            <button type="submit" class="submit">Register</button>
+          </div>
+          </form>
         <div class="two-col">
           <div class="one">
             <input type="checkbox" id="login-check">
@@ -81,14 +95,66 @@
           </div>
         </div>
         <div class="google-signin-wrapper">
-          <div class="g-signin2" data-onsuccess="onSignIn" style="display:none;"></div>
-          <button id="customGoogleBtn" class="custom-google-btn">
-            <i class="fab fa-google"></i>
-          </button>
-        </div>
+          <div id="g_id_onload"
+               data-client_id="101556968005-t3ldobv622kv5ruaem1nuhurlvojp2bo.apps.googleusercontent.com"
+               data-callback="onSignIn"
+               data-auto_prompt="false">
+          </div>
+          <div class="g_id_signin" data-type="standard"></div>
+          <div class="data">
+              <p>Name:</p>
+              <p id="name" class="alert alert-success"></p>
+              <p>Profile pic:</p>
+              <img id="image" class="round-circle" width="100" height="100">
+              <p>Email:</p>
+              <p id="email"></p>
+              <button type="button" class="btn btn-danger" onclick="signOut()">Sign Out</button>
+          </div>
+      </div>
+      </div>
       </div>
     </div>
   </div>
+  <!-- <script>
+    // function onSignIn(googleUser) {
+        
+    //     var user = jwt_decode(response.credential);
+    //         document.getElementById('name').innerText = user.name;
+    //         document.getElementById('email').innerText = user.email;
+    //         document.getElementById('image').src = user.picture;
+    //         document.querySelector('.data').style.display = 'block';
+    //         document.querySelector('.g_id_signin').style.display = 'none';
+    // }
+
+    // function signOut() {
+        
+
+    //     google.accounts.id.disableAutoSelect();
+    //         document.querySelector('.g_id_signin').style.display = 'block';
+    //         document.querySelector('.data').style.display = 'none';
+    //         alert("Signed out successfully");
+    //     };
+    
+</script> -->
+
+<script>
+  function onSignIn(response) {
+      var user = jwt_decode(response.credential);
+      document.getElementById('name').innerText = user.name;
+      document.getElementById('email').innerText = user.email;
+      document.getElementById('image').src = user.picture;
+      document.querySelector('.data').style.display = 'block';
+      document.querySelector('.g_id_signin').style.display = 'none';
+  }
+
+  function signOut() {
+      google.accounts.id.disableAutoSelect();
+      document.querySelector('.g_id_signin').style.display = 'block';
+      document.querySelector('.data').style.display = 'none';
+      alert("Signed out successfully");
+  }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.0.0/build/jwt-decode.min.js"></script>
 
   <script>
     function myMenuFunction() {
@@ -99,29 +165,52 @@
         i.className = "nav-menu";
       }
     }
+    function Login(event) {
+    event.preventDefault(); // Prevent the form from submitting normally
+    console.log("hello..")
+    const formData = {
+        email: document.getElementById('email').value, // Ensure 'username' corresponds to email input
+        password: document.getElementById('password').value
+    };
+  console.log(formData.email)
+  console.log(formData.password)
+  console.log("likhitha")
+  
 
-    function onSignIn(googleUser) {
-      var profile = googleUser.getBasicProfile();
-      console.log('ID: ' + profile.getId());
-      console.log('Name: ' + profile.getName());
-      console.log('Image URL: ' + profile.getImageUrl());
-      console.log('Email: ' + profile.getEmail());
-      // Perform your backend login process here
+  fetch('http://localhost:7001/api/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(formData),
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
     }
+    return response.json();
+  })
+  .then(data => {
+    console.log('Success:', data);
+    alert("sucessful....")
+    window.location.href = '/gather-up/'; 
+   
+    // Redirect to dashboard or another page
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    alert("login faill.... in valid login credentials...")
+    // window.location.href = '/gather-up/'; 
+    
+  });
+}
 
-    document.getElementById('customGoogleBtn').addEventListener('click', function() {
-      const auth2 = gapi.auth2.getAuthInstance();
-      auth2.signIn().then(onSignIn);
-    });
-
-    function startApp() {
-      gapi.load('auth2', function() {
-        gapi.auth2.init();
-      });
-    }
+  
 
     startApp();
   </script>
+
+  <script src="index.js"></script>
 
 </body>
 
